@@ -2,13 +2,13 @@ local router = {}
  local route = require("app.route")
 
 function router.EndpointsInitialize()
-    --POST
-    route.Post('house',
-    dofile("www/app/controller/house_controller.lua").Post)
+    -- --POST
+    -- route.Post('house',
+    -- dofile("www/app/controller/house_controller.lua").Post)
     --GET
     route.Get('house',
     dofile("www/app/controller/house_controller.lua").Get)
-    -- add type later for auth?
+    -- -- add type later for auth?
 end
 
 function router.SetPath(endpoint, method)
@@ -19,9 +19,9 @@ function router.SetPath(endpoint, method)
     local rout = route.GetRoute(endpoint, method)
     -- tikrinti kita validacija?
     -- padaryti JWT?
-    return rout["controller"]()
-    --
-
+    -- if rout and rout["type"] =='public'then
+    --     return rout["controller"]()
+    -- end
 end
 
 

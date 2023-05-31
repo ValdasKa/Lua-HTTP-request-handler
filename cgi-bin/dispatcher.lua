@@ -1,39 +1,37 @@
-_Cjson = require "cjson"
+cjson = require "cjson"
 package.path = ";/www/?.lua"
-require("utils.get_set_input")
-local getset = require("utils.get_set_input")
+getset = require("utils.get_set_input")
 local router = require("router.router")
-
+require("utils.contains")
+local RequestParser = require("utils.parser")
 
 local function send_response(response)
-    uhttpd.send("Status: 200\r\n")
-    uhttpd.send("Content-Type: application/json\r\n\r\n")
-    uhttpd.send(response)
+   
+    uhttpd.send("status")
+   
+    -- uhttpd.send(getset:GetInput("status"))
+    uhttpd.send("Content-Type: application/json\n")
+    uhttpd.send("Cache-Control: no-cache\n\n")
+
+
+    uhttpd.send(cjson.encode(cjson.encode(response)))
+    uhttpd.send(cjson.encode(getset:GetInput("env")))
+    
+    -- uhttpd.send("\n" .. cjson.encode(response))
+    
 end
 
 
 -- Main body required by uhhtpd-lua plugin
 function handle_request(env)
 
-    -- router.EndpointsInitialize()
-    -- -- reikia parseri pasidaryt
-    -- local response = router.SetPath(getset:GetInput("path"), getset:GetInput("env").REQUEST_METHOD)
-    -- -- prideti code
-    -- -- headeri? content type?
-    -- -- or body?
-
-    -- send_response(response .. "\n")
-	
-    -- uhttpd.send(getset:GetInput("status"))
-    -- Injected uhttpd method
-    -- here is simple print
-    if env["REQUEST_METHOD"] == 'GET' then response = dofile("www/app/controller/house_controller.lua").Get() end
-    if env["REQUEST_METHOD"] == 'POST' then response = dofile("www/app/controller/house_controller.lua").Post() end
-    send_response(response .. "\n")
-    uhttpd.send(_Cjson.encode(env)) --  gal reikes
-	
-    --endpoint:handle_request()
+    router.EndpointsInitialize()
+    if (RequestParser.ParseRequest(env)) then
+    -- reikia parseri pasidaryt
+    local response = router.SetPath(getset:GetInput("path"),
+    getset:GetInput("env").REQUEST_METHOD)
+    send_response(response)
+    else
+        uhttpd.send("status")
+	end
 end
-
--- riekia prideti kad kviestu is router
--- reikia is kart pasidaryti kad auto butu 
