@@ -49,5 +49,35 @@ function route.Get(endpoint, controller, type)
    })
         return true
 end
+function route.Put(endpoint, controller, type)
+    for _, value in ipairs(routeList) do
+        if Contains(value, endpoint) and Contains(value, "PUT")
+        and Contains(value, controller) then
+            return true
+        end
+    end
+    table.insert(routeList,{
+    ["endpoint"] = endpoint,
+    ["REQUEST_METHOD"] = "PUT",
+    ["controller"] = controller,
+    ["type"] = type
+    })
+        return true
+end
+function route.Delete(endpoint, controller, type)
+    for _, value in ipairs(routeList) do
+        if Contains(value, endpoint) and Contains(value, "Delete")
+        and Contains(value, controller) then
+            return true
+        end
+    end
+    table.insert(routeList,{
+    ["endpoint"] = endpoint,
+    ["REQUEST_METHOD"] = "Delete",
+    ["controller"] = controller,
+    ["type"] = type
+    })
+        return true
+end
 
 return route

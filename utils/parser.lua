@@ -1,5 +1,6 @@
 local RequestParser = {}
 function ParseData(data)
+    -- make bonus checker for data? because now return null
     local k, v = {}, {}
     local newdata = {}
     for key in data:gmatch("(.-)\r\n") do
@@ -27,7 +28,7 @@ end
 function ParseJson(data)
     local status, value = pcall(cjson.decode, data)
     if status then return value
-    end
+    end -- add later new http response code
     return "Error json"
 end
 function ParseBody(body, type)
@@ -51,8 +52,6 @@ function RequestParser.ParseRequest(env)
         getset:SetInput("data-uri", "")-- add uri data?
         return true
     end
-    -- fuction parse data from URI?
-    -- function prase data from body?
     getset:SetInput("data-body", ParseBody(getset:GetInput("body"),
     getset:GetInput("env").CONTENT_TYPE))
     getset:SetInput("data-uri", ParseURI(env.REQUEST_URI))
