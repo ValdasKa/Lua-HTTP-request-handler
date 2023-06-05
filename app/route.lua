@@ -18,14 +18,12 @@ function route.GetRoute(endpoint, method)
 end
 -- fix function
 function route.Post(endpoint, controller, type)
-    local test = true
     for _, value in ipairs(routeList) do
     if Contains(value, endpoint) and Contains(value, "POST")
     and Contains(value, controller) then
         return true
     end
 end
-    if not test then
     table.insert(routeList,{
         ["endpoint"] = endpoint,
         ["REQUEST_METHOD"] = "POST",
@@ -33,20 +31,16 @@ end
         ["type"] = type
        })
        return true
-    end
-    return false
 end
 
 -- -- check later for fixes
 function route.Get(endpoint, controller, type)
-    local test = true
     for _, value in ipairs(routeList) do
         if Contains(value, endpoint) and Contains(value, "GET")
         and Contains(value, controller) then
             return true
         end
     end
-    if not test then
    table.insert(routeList,{
     ["endpoint"] = endpoint,
     ["REQUEST_METHOD"] = "GET",
@@ -54,8 +48,6 @@ function route.Get(endpoint, controller, type)
     ["type"] = type
    })
         return true
-    end
-    return false
 end
 
 return route
