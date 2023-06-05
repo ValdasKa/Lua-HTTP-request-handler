@@ -1,16 +1,11 @@
 local RequestParser = {}
 function ParseData(data)
-    -- make bonus checker for data? because now return null
     local k, v = {}, {}
     local newdata = {}
-    -- local cnt = 0
-    -- data = data .. "\r\n"
     for key in data:gmatch("(.-)\r\n") do
-        -- cnt = cnt +1
         if string.match(key, "name=") then
             table.insert(k, string.match(key, 'name=".+)"'))
         end
-        -- if cnt % 4 == 0 then table.insert(v, key) end
     end
     for key, value in ipairs(k) do
         newdata[value] = v[key]
