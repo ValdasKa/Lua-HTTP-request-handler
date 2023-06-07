@@ -15,9 +15,9 @@ function router.EndpointsInitialize()
 
 end
 function router.SetPath(endpoint, method)
-    if not dofile("www/utils/valid_path.lua").PathValidation(endpoint, request_method, route) then
-        return
-    end
+    -- if not dofile("www/utils/valid_path.lua").PathValidation(endpoint, method, route) then
+    --     return
+    -- end
 
     local rout = route.GetRoute(endpoint, method)
     
