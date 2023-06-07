@@ -27,6 +27,7 @@ function handle_request(env)
     router.EndpointsInitialize()
     if (RequestParser.ParseRequest(env)) then
         local response = router.SetPath(getset:GetInput("path"), getset:GetInput("env").REQUEST_METHOD)
+        -- local response = getset:GetInput("env").REQUEST_METHOD
         send_response(response)
 	end
     -- local response

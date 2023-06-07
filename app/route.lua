@@ -37,7 +37,7 @@ end
        return true
 end
 
--- -- check later for fixes
+-- check later for fixes
 function route.Get(endpoint, controller, type)
     for _, value in ipairs(routeList) do
         if Contains(value, endpoint) and Contains(value, "GET")
@@ -70,14 +70,14 @@ function route.Put(endpoint, controller, type)
 end
 function route.Delete(endpoint, controller, type)
     for _, value in ipairs(routeList) do
-        if Contains(value, endpoint) and Contains(value, "Delete")
+        if Contains(value, endpoint) and Contains(value, "DELETE")
         and Contains(value, controller) then
             return true
         end
     end
     table.insert(routeList,{
     ["endpoint"] = endpoint,
-    ["REQUEST_METHOD"] = "Delete",
+    ["REQUEST_METHOD"] = "DELETE",
     ["controller"] = controller,
     ["type"] = type
     })

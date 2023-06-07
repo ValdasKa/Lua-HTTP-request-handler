@@ -15,12 +15,13 @@ function router.EndpointsInitialize()
 
 end
 function router.SetPath(endpoint, method)
-    -- if not dofile("www/utils/valid_path.lua").PathValidation(endpoint, method, route) then
-    --     return
-    -- end
-
+    if not dofile("www/utils/valid_path.lua").PathValidation(endpoint, method, route) then
+        return
+    end
+    -- uhttpd.send("<br>")
+    -- uhttpd.send(method)
+    -- uhttpd.send("<br>")
     local rout = route.GetRoute(endpoint, method)
-    
     if rout and rout["type"] == 'protected' then
             return rout["controller"]()
         end

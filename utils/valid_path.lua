@@ -5,6 +5,7 @@ local function PathExist(endpoint, route)
             return true
         end
     end
+    HttpResponseCode:send404()
 end
 local function PathRequestValidation(endpoint, method, route)
     for _, value in pairs(route.GetList()) do
@@ -19,7 +20,10 @@ function valid_path.PathValidation(endpoint, method, route)
     then
         return
     end
-    if not PathRequestValidation(endpoint, method, route) then
+    -- uhttpd.send("<br>")
+    -- uhttpd.send(method)
+    -- uhttpd.send("<br>")
+    if PathRequestValidation(endpoint, method, route) then
         return true
     end
 end
