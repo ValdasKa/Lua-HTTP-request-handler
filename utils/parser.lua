@@ -27,9 +27,10 @@ end
 -- add json printer
 function ParseJson(data)
     local status, value = pcall(cjson.decode, data)
-    if status then return value
-    end -- add later new http response code
-    return "Error json"
+    if status then
+        return value
+    end 
+    HttpResponseCode:send400()
 end
 function ParseBody(body, type)
     if string.match(type, "multipart/form-data")

@@ -8,19 +8,14 @@ function route.GetList()
 end
 
 function route.GetRoute(endpoint, method)
-    -- uhttpd.send("Before")
-
     for _, value in ipairs(routeList) do
         if Contains(value, endpoint) and Contains(value, method)
         then
-            -- uhttpd.send("If<br>")
             return value
         end
-        -- uhttpd.send("Outside if<br>")
     end
     return false
 end
--- fix function
 function route.Post(endpoint, controller, type)
     for _, value in ipairs(routeList) do
     if Contains(value, endpoint) and Contains(value, "POST")
@@ -36,8 +31,6 @@ end
        })
        return true
 end
-
--- check later for fixes
 function route.Get(endpoint, controller, type)
     for _, value in ipairs(routeList) do
         if Contains(value, endpoint) and Contains(value, "GET")
@@ -83,5 +76,4 @@ function route.Delete(endpoint, controller, type)
     })
         return true
 end
-
 return route
