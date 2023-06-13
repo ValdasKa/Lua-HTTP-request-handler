@@ -10,6 +10,9 @@ function router.EndpointsInitialize()
     dofile("www/app/controller/house_controller.lua").Put, 'protected')
     route.Delete('house',
     dofile("www/app/controller/house_controller.lua").Delete, 'protected')
+    -- authentication token get
+    route.Post('auth',
+    dofile("www/app/controller/jwt_authentication_controller.lua").GetToken, 'public')
 
 end
 function router.SetPath(endpoint, method)
@@ -18,8 +21,12 @@ function router.SetPath(endpoint, method)
     end
     local rout = route.GetRoute(endpoint, method)
     if rout and rout["type"] == 'protected' then
+        -- later finish jwt add
             return rout["controller"]()
-        end
+    end
+    if rout and rout["type"] == 'public' then
+        return rout["controller"]()
+    end
 end
 
 return router

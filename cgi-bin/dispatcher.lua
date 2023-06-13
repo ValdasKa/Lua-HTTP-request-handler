@@ -1,4 +1,5 @@
 cjson = require "cjson"
+Jwt = require "luajwtjitsi"
 package.path = ";/www/?.lua"
 getset = require("utils.get_set_input")
 local router = require("router.router")
