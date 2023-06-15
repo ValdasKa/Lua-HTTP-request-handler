@@ -15,6 +15,7 @@ function ParseData(data)
 end
 -- https://stackoverflow.com/questions/28916182/parse-parameters-out-of-url-in-lua
 function ParseURI(data)
+    if not data then return "false" end
     local newdata = {}
     for key, value in string.gmatch(data, "([^&=?]+)=([^&=?]+)")
     do
@@ -42,22 +43,19 @@ function ParseBody(body, type)
     then
         return ParseJson(body)
     end
-    if string.match(type, "application/x-www-form-urlencoded") 
+    if string.match(type, "application/x-www-form-urlencoded")
     then
         return ParseURI(body)
     end
 end
 function RequestParser.ParseRequest(env)
     getset:SetInput("env", env)
+    uhttpd.send("<br>")
     getset:SetInput("body", io.read("*all"))
-    
     getset:SetInput("path", string.match(env.PATH_INFO,"^/*(.+)"))
-    if not getset:GetInput("env").CONTENT_TYPE then
-        getset:SetInput("data-body", "test")
-        getset:SetInput("data-uri", "test")
-        return true--, uhttpd.send("DEAD<br>")--, uhttpd.send(getset:GetInput("env").CONTENT_TYPE)
-    end
-    uhttpd.send("dead zone i guess")
+
+  
+    uhttpd.send("\n\n" .. getset:GetInput("env").CONTENT_TYPE)
     getset:SetInput("data-body", ParseBody(getset:GetInput("body"), getset:GetInput("env").CONTENT_TYPE))
     getset:SetInput("data-uri", ParseURI(env.REQUEST_URI))
     return true
