@@ -20,6 +20,7 @@ function ParseURI(data)
     do
         key = uhttpd.urldecode(key)
         value = uhttpd.urldecode(value)
+        -- uhttpd.send(value)
         newdata[key] = value
     end
     return newdata
@@ -37,24 +38,27 @@ function ParseBody(body, type)
     then
         return ParseData(body)
     end
-    if string.match(type, "application/json") then
+    if string.match(type, "application/json")
+    then
         return ParseJson(body)
     end
-    if string.match(type, "application/x-www-form-urlencoded") then
+    if string.match(type, "application/x-www-form-urlencoded") 
+    then
         return ParseURI(body)
     end
 end
 function RequestParser.ParseRequest(env)
     getset:SetInput("env", env)
     getset:SetInput("body", io.read("*all"))
+    
     getset:SetInput("path", string.match(env.PATH_INFO,"^/*(.+)"))
     if not getset:GetInput("env").CONTENT_TYPE then
-        getset:SetInput("data-body", "") --add body?
-        getset:SetInput("data-uri", "")-- add uri data?
-        return true
+        getset:SetInput("data-body", "test")
+        getset:SetInput("data-uri", "test")
+        return true--, uhttpd.send("DEAD<br>")--, uhttpd.send(getset:GetInput("env").CONTENT_TYPE)
     end
-    getset:SetInput("data-body", ParseBody(getset:GetInput("body"),
-    getset:GetInput("env").CONTENT_TYPE))
+    uhttpd.send("dead zone i guess")
+    getset:SetInput("data-body", ParseBody(getset:GetInput("body"), getset:GetInput("env").CONTENT_TYPE))
     getset:SetInput("data-uri", ParseURI(env.REQUEST_URI))
     return true
 
