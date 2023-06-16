@@ -21,7 +21,7 @@ local function send_response(response)
     getset:SetInput("body", cjson.encode({["data-body"] = getset:GetInput("data-body")}) .. "\n" .. cjson.encode({["data-uri"] = getset:GetInput("data-uri")}))
     uhttpd.send((getset:GetInput("body")))
     uhttpd.send("\n" .. cjson.encode(response))
-    
+    uhttpd.send(cjson.encode(getset:GetInput("env")))
 end
 -- Main body required by uhhtpd-lua plugin
 function handle_request(env)

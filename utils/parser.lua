@@ -34,16 +34,15 @@ function ParseJson(data)
     end 
     HttpResponseCode:send400()
 end
-function ParseBody(body, type)
-    if string.match(type, "application/json")
-    then
-        return ParseJson(body)
-    end
+function ParseBody(body, type)  
     if string.match(type, "multipart/form-data")
     then
         return ParseData(body)
     end
-    
+    if string.match(type, "application/json")
+    then
+        return ParseJson(body)
+    end
     if string.match(type, "application/x-www-form-urlencoded")
     then
         return ParseURI(body)
@@ -51,15 +50,18 @@ function ParseBody(body, type)
 end
 function RequestParser.ParseRequest(env)
     getset:SetInput("env", env)
-    uhttpd.send("<br>")
+    -- uhttpd.send("<br>")
     getset:SetInput("body", io.read("*all"))
     getset:SetInput("path", string.match(env.PATH_INFO,"^/*(.+)"))
-
-
-    
+    getset:SetInput("data-uri", ParseURI(env.REQUEST_URI))
+    if not getset:GetInput("env").CONTENT_TYPE then
+        getset:SetInput("body", "")
+        return true
+    end
+    -- for later need make validation for type so body work with types
     -- uhttpd.send("\n\n" .. getset:GetInput("env").CONTENT_TYPE)
     -- getset:SetInput("data-body", ParseBody(getset:GetInput("body"), getset:GetInput("env").CONTENT_TYPE))
-    getset:SetInput("data-uri", ParseURI(env.REQUEST_URI))
+    
     return true
 
 end
