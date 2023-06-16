@@ -22,11 +22,6 @@ local function send_response(response)
     uhttpd.send((getset:GetInput("body")))
     uhttpd.send("\n" .. cjson.encode(response))
     
-
-    -- uhttpd.send("<br>")
-    
-    -- uhttpd.send(cjson.encode(getset:GetInput("env").QUERY_STRING))
-    uhttpd.send(cjson.encode(getset:GetInput("env")))
 end
 -- Main body required by uhhtpd-lua plugin
 function handle_request(env)
@@ -36,12 +31,8 @@ function handle_request(env)
     
     router.EndpointsInitialize()
     if (RequestParser.ParseRequest(env)) then
-        -- uhttpd.send(tostring(RequestParser.ParseRequest(env)))
         local response = router.SetPath(getset:GetInput("path"), getset:GetInput("env").REQUEST_METHOD)
-        -- local response = getset:GetInput("env").REQUEST_METHOD
-        -- uhttpd.send("<br>")
-        -- uhttpd.send()
-        -- uhttpd.send("<br>")
+       
         send_response(response)
 	end
 end
