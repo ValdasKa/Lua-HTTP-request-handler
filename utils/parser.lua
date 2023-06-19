@@ -34,8 +34,12 @@ function ParseJson(data)
     end 
     HttpResponseCode:send400()
 end
-function ParseBody(body, type)  
-    if string.match(type, "multipart/form-data")
+function ParseBody(body, type)
+    if not type then
+        return "no type"
+    end
+    -- if string.match(type, "multipart/form-data")
+    if type == "multipart/form-data"
     then
         return ParseData(body)
     end
@@ -48,16 +52,51 @@ function ParseBody(body, type)
         return ParseURI(body)
     end
 end
+-------------------tests for body printing 
+local function CheckContentDataType(type, body)
+    uhttpd.send("vazuojam<br>")
+    -- uhttpd.send(type)
+    if not (string.match(type, "multipart/form-data"))
+    then
+        return "Type not suported"
+    end
+    if type == "multipart/form-data" and not cjson.encode(body) then
+        return HttpResponseCode:send400()
+    end
+
+    return true
+end
+function ValidateContentType(body)
+    --getset:GetInput("env").CONTENT_TYPE
+        if CheckContentDataType(getset:GetInput("env").headers["content-type"], body) then
+        return false
+    end
+    return true
+end
+
 function RequestParser.ParseRequest(env)
     getset:SetInput("env", env)
     -- uhttpd.send("<br>")
     getset:SetInput("body", io.read("*all"))
     getset:SetInput("path", string.match(env.PATH_INFO,"^/*(.+)"))
-    getset:SetInput("data-uri", ParseURI(env.REQUEST_URI))
-    if not getset:GetInput("env").CONTENT_TYPE then
-        getset:SetInput("body", "")
-        return true
-    end
+    uhttpd.send(tostring(getset:GetInput("env").headers["content-type"]))
+    -- getset:SetInput("data-uri", ParseURI(env.REQUEST_URI))
+    ---------------------------TESTS------------------------------
+    -- uhttpd.send("parserequestai<br>")
+    -- uhttpd.send("<br>")
+    -- uhttpd.send(getset:GetInput("env").headers["content-type"])
+    -- uhttpd.send("<br>")
+
+    -- if not ValidateContentType(getset:GetInput("body")) then
+    --     return false
+    -- end
+    getset:SetInput("data-body", ParseBody(getset:GetInput("body"), getset:GetInput("env").headers["content-type"]))
+    
+    
+    -- if not getset:GetInput("env").CONTENT_TYPE then
+    --     getset:SetInput("body", "")
+    --     return true
+    -- end
     -- for later need make validation for type so body work with types
     -- uhttpd.send("\n\n" .. getset:GetInput("env").CONTENT_TYPE)
     -- getset:SetInput("data-body", ParseBody(getset:GetInput("body"), getset:GetInput("env").CONTENT_TYPE))
