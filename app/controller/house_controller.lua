@@ -47,13 +47,11 @@ function house_controller.Get()
    
 end
 house_controller.Get()
--- function house_controller.Get()
---         HttpResponseCode:send200()
---     return "house controller GET reached"
--- end
+
 function house_controller.Post()
     HttpResponseCode:send200()
-    return "house controller POST reached"
+    -- print data-body
+    return Payload:GetInput("data-body") 
 end
 function house_controller.Delete()
     HttpResponseCode:send200()

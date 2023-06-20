@@ -52,13 +52,14 @@ function ParseBody(body, type)
 end
 
 function RequestParser.ParseRequest(env)
-    getset:SetInput("env", env)
-    getset:SetInput("body", io.read("*all"))
-    getset:SetInput("path", string.match(env.PATH_INFO,"^/*(.+)"))
+    Payload:SetInput("env", env)
+    Payload:SetInput("body", io.read("*all"))
+    Payload:SetInput("path", string.match(env.PATH_INFO,"^/*(.+)"))
     
-    getset:SetInput("data-uri", ParseURI(env.REQUEST_URI))
-    
-    getset:SetInput("data-body", ParseBody(getset:GetInput("body"), getset:GetInput("env").headers["content-type"]))
+    Payload:SetInput("data-uri", ParseURI(env.REQUEST_URI))
+  
+
+    Payload:SetInput("data-body", ParseBody(Payload:GetInput("body"), Payload:GetInput("env").headers["content-type"]))
     
     return true
 
