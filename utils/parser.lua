@@ -56,31 +56,17 @@ end
 
 function RequestParser.ParseRequest(env)
     getset:SetInput("env", env)
-    -- uhttpd.send("<br>")
     getset:SetInput("body", io.read("*all"))
     getset:SetInput("path", string.match(env.PATH_INFO,"^/*(.+)"))
     
     getset:SetInput("data-uri", ParseURI(env.REQUEST_URI))
     ---------------------------TESTS------------------------------
-    -- uhttpd.send("parserequestai<br>")
-    -- uhttpd.send("<br>")
+    
     uhttpd.send(tostring(getset:GetInput("env").CONTENT_TYPE))
     uhttpd.send(tostring(getset:GetInput("env").headers["content-type"]))
-    -- uhttpd.send("<br>")
-
-    -- if not ValidateContentType(getset:GetInput("body")) then
-    --     return false
-    -- end
+    
     getset:SetInput("data-body", ParseBody(getset:GetInput("body"), getset:GetInput("env").headers["content-type"]))
-    
-    -- if not getset:GetInput("env").CONTENT_TYPE then
-    --     getset:SetInput("body", "")
-    --     return true
-    -- end
-    -- for later need make validation for type so body work with types
-    -- uhttpd.send("\n\n" .. getset:GetInput("env").CONTENT_TYPE)
-    -- getset:SetInput("data-body", ParseBody(getset:GetInput("body"), getset:GetInput("env").CONTENT_TYPE))
-    
+ 
     return true
 
 end
