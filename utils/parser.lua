@@ -1,6 +1,5 @@
 local RequestParser = {}
 function ParseData(data)
-    -- make bonus checker for data? because now return null
     local k, v = {}, {}
     local newdata = {}
     for key in data:gmatch("(.-)\r\n") do
@@ -21,7 +20,6 @@ function ParseURI(data)
     do
         key = uhttpd.urldecode(key)
         value = uhttpd.urldecode(value)
-        -- uhttpd.send(value)
         newdata[key] = value
     end
     return newdata
@@ -35,8 +33,8 @@ function ParseJson(data)
     HttpResponseCode:send400()
 end
 function ParseBody(body, type)
-    if type == nil then
-        return "Content-type is nil"
+    if not type then
+        return "False"
     end
     if string.match(type, "multipart/form-data")
     then
@@ -53,20 +51,15 @@ function ParseBody(body, type)
     
 end
 
-
 function RequestParser.ParseRequest(env)
     getset:SetInput("env", env)
     getset:SetInput("body", io.read("*all"))
     getset:SetInput("path", string.match(env.PATH_INFO,"^/*(.+)"))
     
     getset:SetInput("data-uri", ParseURI(env.REQUEST_URI))
-    ---------------------------TESTS------------------------------
-    
-    uhttpd.send(tostring(getset:GetInput("env").CONTENT_TYPE))
-    uhttpd.send(tostring(getset:GetInput("env").headers["content-type"]))
     
     getset:SetInput("data-body", ParseBody(getset:GetInput("body"), getset:GetInput("env").headers["content-type"]))
- 
+    
     return true
 
 end
