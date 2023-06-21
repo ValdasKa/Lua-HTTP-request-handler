@@ -28,10 +28,10 @@ function model.InsertToTable()
     -- conn:execute([[INSERT INTO house values('11','Raj')]])
 end
 function model.DeleteFromTable()
-    
+    -- local delete_statement = db:prepare[[ DELETE FROM list WHERE id = :id]]
 end
 function model.UpdateTable()
-    
+    -- local update_statement = db:prepare[[ UPDATE list SET name = :name, icon = :icon WHERE id = :id]]
 end
 
 function model:SetTable(name)
